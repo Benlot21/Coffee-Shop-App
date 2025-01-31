@@ -1,11 +1,39 @@
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Pressable} from 'react-native'
-import React from 'react'
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Pressable, Platform, Alert} from 'react-native'
+import { ToastAndroid } from 'react-native';
+import React, { useState } from 'react'
 
 import Colors from '../../constant/Colors'
 import {useRouter} from 'expo-router'
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import {auth} from './../../config/firebaseConfig'
+
 
 export default function signin() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const showMessage = (message) => {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(message, ToastAndroid.BOTTOM);
+    } else {
+      Alert.alert(message);
+    }
+  };
+  
+  // Usage
+  showMessage('Incorrect Email & Password');
+
+  const onSignInClick=()=>{
+    signInWithEmailAndPassword(auth, email, password)
+    .then(resp=>{
+      const user=resp.user
+      console.log(user)
+    }).catch(e=>{
+      console.log(e)
+      ToastAndroid.show('Incorrect Email & Password', ToastAndroid.BOTTOM); 
+    })
+  }
   return (
           <View style={{
               display: 'flex',
@@ -31,10 +59,11 @@ export default function signin() {
                   Welcome Back
               </Text>
   
-              <TextInput placeholder='Email' style={styles.textInout}></TextInput>
-              <TextInput placeholder='Password' secureTextEntry={true} style={styles.textInout}></TextInput>
+              <TextInput placeholder='Email' onChangeText={(value) => setEmail(value)} style={styles.textInout}></TextInput>
+              <TextInput placeholder='Password' onChangeText={(value) => setPassword(value)} secureTextEntry={true} style={styles.textInout}></TextInput>
   
               <TouchableOpacity 
+              onPress={onSignInClick}
                   style={{
                       padding: 15,
                       backgroundColor: 'white',
@@ -56,11 +85,11 @@ export default function signin() {
                   flexDirection: 'row', gap: 5,
                   marginTop: 20
               }}>
-                  <Text styles={{
+                  <Text style = {{
                       fontFamily: 'Outfit',
                   }}>Don't have an account?</Text>
                   <Pressable
-                  onPress={() => router.push('/auth/signIn')}
+                  onPress={() => router.push('/auth/signUp')}
                   >
                       <Text style={{
                           color: 'white',

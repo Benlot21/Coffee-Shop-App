@@ -36,3 +36,10 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+
+firebase.json
+.env
+.env.local
+.env.production
+.env.development
