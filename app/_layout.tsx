@@ -6,7 +6,7 @@ import { useState } from "react"
 
 export default function RootLayout() {
 
-  const [userDetail, setUserDetail] = useState();
+  const [userDetail, setUserDetail] = useState('');
   
   return (
     <UserDetailContext.Provider value={{userDetail, setUserDetail}}>

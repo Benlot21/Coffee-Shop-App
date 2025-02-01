@@ -1,4 +1,4 @@
 export default {
-    White: '#fff',
+    White: '#FFFFFF',
     Primary: '#FFD59A',
 }
